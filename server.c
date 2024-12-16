@@ -12,31 +12,18 @@
 
 #include "minitalk.h"
 
-void	receiver(int sig)
+int	main()
 {
-	static int				i = 0;
-	static unsigned char	c = 0;
+	pid_t	pid;
+	struct sigaction	sa;
+	
+	sa.sa_handlet = handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
 
-	if (sig == SIGUSR2)
-		c = c << 1;
-	else if (sig == SIGUSR1)
-		c = c << 1 | 0b00000001;
-	i++;
-	if (i == 8)
-	{
-		ft_printf("%c", c);
-		i = 0;
-		c = 0;
-	}
-}
-
-int	main(void)
-{
-	ft_printf("PID: %d\n", getpid());
+	pid = getpid();
+	ft_printf("PID : %d\n", pid);
 	while (1)
-	{
-		signal(SIGUSR1, receiver);
-		signal(SIGUSR2, receiver);
-	}
+		pause();
 	return (0);
 }

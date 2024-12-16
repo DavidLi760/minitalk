@@ -13,11 +13,18 @@
 #ifndef MINITALK_H
 # define MINITALK_H
 
-# include <bits/types/siginfo_t.h>
 # include <signal.h>
-# include <stdlib.h>
+# include <sys/types.h>
 # include <unistd.h>
-# include "libft/ft_printf/ft_printf.h"
-# include "libft/libft.h"
+# include <stdio.h>
+# include "ft_printf/ft_printf.h"
+
+struct sigaction s_sigaction
+{
+    void    (*sa_handler)(int);
+    sigset_t sa_mask;
+    int         sa_flags;
+    
+} t_sigaction;
 
 #endif
