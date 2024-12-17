@@ -19,12 +19,4 @@
 # include <stdio.h>
 # include "ft_printf/ft_printf.h"
 
-struct sigaction s_sigaction
-{
-    void    (*sa_handler)(int);
-    sigset_t sa_mask;
-    int         sa_flags;
-    
-} t_sigaction;
-
 #endif
