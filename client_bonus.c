@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: davli <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/16 18:56:04 by davli             #+#    #+#             */
-/*   Updated: 2024/12/19 18:56:17 by davli            ###   ########.fr       */
+/*   Created: 2024/12/19 19:23:55 by davli             #+#    #+#             */
+/*   Updated: 2024/12/19 19:25:38 by davli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,11 @@ void	send_end(int pid, char c)
 
 int	main(int argc, char **argv)
 {
+	sigset_t	new_set;
+
+	sigemptyset(&new_set);
+	sigaddset(&new_set, SIGINT);
+	sigprocmask(SIG_BLOCK, &new_set, NULL);
 	if (argc != 3)
 	{
 		ft_printf("Usage: %s <PID> <message>\n", argv[0]);
