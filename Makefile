@@ -28,7 +28,7 @@ fclean : clean
 re : fclean all
 	rm -rf $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4)
 
-bonus :
+bonus : fclean
 	$(CC) $(CFLAGS) $(SRC3) ft_printf/libftprintf.a -o $(NAME1)
 	$(CC) $(CFLAGS) $(SRC4) ft_printf/libftprintf.a -o $(NAME2)
 
