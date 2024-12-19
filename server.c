@@ -6,13 +6,13 @@
 /*   By: davli <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 18:56:10 by davli             #+#    #+#             */
-/*   Updated: 2024/12/17 18:50:20 by davli            ###   ########.fr       */
+/*   Updated: 2024/12/19 18:15:53 by davli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-static int	finish = 0;
+static int	g_finish = 0;
 
 int	ft_strlen(char *str)
 {
@@ -24,15 +24,13 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
-char	*ft_strjoin(char *s1, char s2)
+char	*ft_strjoin(char *s1, char s2, int i)
 {
-	int		i;
 	char	*str;
 	int		len;
 
-	i = -1;
 	if (s2 == '\0')
-		finish = 1;
+		g_finish = 1;
 	if (!s1)
 	{
 		s1 = malloc(1);
@@ -62,24 +60,28 @@ void	handler(int signum, siginfo_t *info, void *context)
 
 	(void)context;
 	(void)info;
-    if (signum == SIGUSR2)
-        c = c << 1;
+	if (signum == SIGUSR2)
+		c = c << 1;
 	else if (signum == SIGUSR1)
 		c = c << 1 | 0b00000001;
 	i++;
-    if (i == 8)
+	if (i == 8)
 	{
-		str = ft_strjoin(str, c);
-        i = 0;
+		str = ft_strjoin(str, c, -1);
+		i = 0;
 		c = 0;
-    }
-	if (finish == 1)
+	}
+	if (g_finish == 1)
 	{
 		ft_printf("%s\n", str);
 		free(str);
 		str = NULL;
-		finish = 0;
+		g_finish = 0;
 	}
+	if (signum == SIGUSR1)
+		kill(info->si_pid, SIGUSR1);
+	if (signum == SIGUSR2)
+		kill(info->si_pid, SIGUSR2);
 }
 
 int	main(void)
@@ -92,9 +94,10 @@ int	main(void)
 	sa.sa_flags = SA_SIGINFO;
 	pid = getpid();
 	ft_printf("PID : %d\n", pid);
-	sigaction(SIGUSR1, &sa, 0);
-	sigaction(SIGUSR2, &sa, 0);
 	while (1)
-		pause();
+	{
+		sigaction(SIGUSR1, &sa, 0);
+		sigaction(SIGUSR2, &sa, 0);
+	}
 	return (0);
 }

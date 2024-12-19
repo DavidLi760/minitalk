@@ -6,7 +6,7 @@
 /*   By: davli <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 18:56:21 by davli             #+#    #+#             */
-/*   Updated: 2024/12/16 18:56:22 by davli            ###   ########.fr       */
+/*   Updated: 2024/12/19 18:16:25 by davli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <stdio.h>
 # include "ft_printf/ft_printf.h"
 
-int     ft_atoi(char *str);
-char    *ft_strjoin(char *s1, char s2);
+int		ft_atoi(char *str);
+char	*ft_strjoin(char *s1, char s2, int i);
 
 #endif
