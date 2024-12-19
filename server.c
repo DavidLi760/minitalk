@@ -52,6 +52,14 @@ char	*ft_strjoin(char *s1, char s2, int i)
 	return (str);
 }
 
+void	send_back( int signum, siginfo_t *info)
+{
+	if (signum == SIGUSR1)
+		kill(info->si_pid, SIGUSR1);
+	if (signum == SIGUSR2)
+		kill(info->si_pid, SIGUSR2);
+}
+
 void	handler(int signum, siginfo_t *info, void *context)
 {
 	static int	i = 0;
@@ -59,7 +67,6 @@ void	handler(int signum, siginfo_t *info, void *context)
 	static char	*str;
 
 	(void)context;
-	(void)info;
 	if (signum == SIGUSR2)
 		c = c << 1;
 	else if (signum == SIGUSR1)
@@ -78,10 +85,7 @@ void	handler(int signum, siginfo_t *info, void *context)
 		str = NULL;
 		g_finish = 0;
 	}
-	if (signum == SIGUSR1)
-		kill(info->si_pid, SIGUSR1);
-	if (signum == SIGUSR2)
-		kill(info->si_pid, SIGUSR2);
+	send_back(signum, info);
 }
 
 int	main(void)
