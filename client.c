@@ -12,49 +12,80 @@
 
 #include "minitalk.h"
 
-void send_bit(pid_t pid, int bit)
+int	ft_atoi(char *str)
 {
-    if (bit == 0)
+	int		i;
+	int		sign;
+	long	nbr;
+
+	i = 0;
+	sign = 1;
+	nbr = 0;
+	while ((str[i] > 8 && str[i] < 14) || str[i] == ' ')
+		i++;
+	if (str[i] == '+' || str[i] == '-')
 	{
-        kill(pid, SIGUSR1);
-    } else {
-        kill(pid, SIGUSR2);
-    }
-    usleep(100);
+		if (str[i] == '-')
+			sign *= -1;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		nbr *= 10;
+		nbr = nbr + str[i] - '0';
+		i++;
+	}
+	return (nbr * sign);
 }
 
-void send_message(pid_t pid, const char *message)
+void send_message(int pid, char *str)
 {
-	int	i;
-	int	bit;
-    unsigned char c;
+	int	    i;
+    char    c;
 
-	i = 7;
-    while (*message)
+    while (*str)
 	{
-		c = *message;
-        while (i >= 0)
+        i = 0;
+		c = *str;
+        while (i < 8)
 		{
-            bit = (c >> i) & 1;
-            send_bit(pid, bit);
-			i--;
+            if (c & 0b10000000)
+                kill(pid, SIGUSR1);
+            else
+                kill(pid, SIGUSR2);
+            c = (c << 1);
+		    i++;
+            usleep(400);
         }
-        message++;
+        str++;
     }
 }
 
-int main(int argc, char *argv[])
+void    send_end(int pid, char c)
+{
+    int i;
+
+    i = 0;
+    while (i < 8)
+    {
+        if (c & 0b10000000)
+            kill(pid, SIGUSR1);
+        else
+            kill(pid, SIGUSR2);
+        c = (c << 1);
+	    i++;
+        usleep(400);
+    }
+}
+
+int main(int argc, char **argv)
 {
     if (argc != 3)
 	{
         ft_printf("Usage: %s <PID> <message>\n", argv[0]);
         return (1);
     }
-
-    pid_t pid = atoi(argv[1]);
-    const char *message = argv[2];
-
-    send_message(pid, message);
-
+    send_message(ft_atoi(argv[1]), argv[2]);
+    send_end(ft_atoi(argv[1]), '\0');
     return (0);
 }

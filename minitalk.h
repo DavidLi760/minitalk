@@ -19,4 +19,7 @@
 # include <stdio.h>
 # include "ft_printf/ft_printf.h"
 
+int     ft_atoi(char *str);
+char    *ft_strjoin(char *s1, char s2);
+
 #endif
